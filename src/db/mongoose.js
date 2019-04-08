@@ -31,38 +31,51 @@ const User = mongoose.model('User', {
         throw new Error('Age must be a postive number')
       }
     }
-  }
-});
-
-const me = new User({
-  name: '   Dmitri   ',
-  age: 34,
-  email: '   Test@mail.com'
-});
-
-me.save().then(() => {
-  console.log(me)
-}).catch((error) => {
-  console.log('Error!', error)
-});
-
-const Task = mongoose.model('Task', {
-  description: {
-    type: String
   },
-  completed: {
-    type: Boolean
+  password: {
+    type: String,
+    required: true,
+    minlength: 7,
+    trim: true,
+    validate(value) {
+      if (value.toLowerCase().includes('password')) {
+        throw new Error('Password cannot contain "password"')
+      }
+    }
   }
 });
 
-// const task = new Task({
-//   description: 'Learn NodeJS',
-//   completed: false
+// const me = new User({
+//   name: '   Dmitri   ',
+//   age: 34,
+//   email: '   Test@mail.com',
+//   password: "fhre@!tew"
 // });
-
-
-// task.save().then(() => {
-//   console.log(task)
+//
+// me.save().then(() => {
+//   console.log(me)
 // }).catch((error) => {
 //   console.log('Error!', error)
 // });
+
+const Task = mongoose.model('Task', {
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const task = new Task({
+  description: '  Learn MongoDB'
+});
+
+task.save().then(() => {
+  console.log(task)
+}).catch((error) => {
+  console.log(error)
+});
